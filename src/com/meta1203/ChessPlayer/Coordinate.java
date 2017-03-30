@@ -1,34 +1,55 @@
 package com.meta1203.ChessPlayer;
 
 public class Coordinate {
-	private byte x;
-	private byte y;
+	private int x;
+	private int y;
 	
-	public Coordinate(byte x, byte y) {
+	public Coordinate(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public byte getX() {
+	public Coordinate translate(int x, int y, boolean white) {
+		// Black moves in a different y direction to white
+		if (!white) {
+			x = 0-x;
+			y = 0-y;
+		}
+		// New coordinates
+		int newX = this.x + x;
+		int newY = this.y + y;
+		// Check to see if the move is out of bounds, set null if so
+		if (newX < 0 || newX > 7 || newY < 0 || newY > 0) {
+			return null;
+		}
+		// Return the translated coordinate
+		return new Coordinate(newX, newY);
+	}
+	
+	// Getters/Setters... pretty self-explanitory
+	// May not need setters
+	public int getX() {
 		return x;
 	}
-	public void setX(byte x) {
+	public void setX(int x) {
 		this.x = x;
 	}
-	public byte getY() {
+	public int getY() {
 		return y;
 	}
-	public void setY(byte y) {
+	public void setY(int y) {
 		this.y = y;
 	}
 	
+	// Check if this Coordinate occupies the same space as another Coordinate
 	public boolean compare(Coordinate other) {
 		return this.x == other.getX() && this.y == other.getY();
 	}
 	
-	public static Coordinate letterToCoord(String x, byte y) {
+	// Translate a human-readable location (G4) to a machine recognizable location (6,3)
+	public static Coordinate letterToCoord(String x, int y) {
 		x = x.toLowerCase();
-		byte xIntern = 0;
+		int xIntern = 0;
 		switch (x) {
 		case "a":
 			xIntern = 0;
@@ -57,6 +78,6 @@ public class Coordinate {
 		default:
 			throw new IllegalArgumentException();
 		}
-		return new Coordinate(xIntern, (byte) (y-1));
+		return new Coordinate(xIntern, y-1);
 	}
 }
