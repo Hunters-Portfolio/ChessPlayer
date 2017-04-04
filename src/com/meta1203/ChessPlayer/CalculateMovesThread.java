@@ -11,10 +11,10 @@ public class CalculateMovesThread extends Thread {
 	
 	@Override
 	public void run() {
-		List<Move> moves = originTurn.getData().getMoves(false);
+		List<Move> moves = originTurn.getBoard().getMoves(originTurn);
 		for (Move x : moves) {
 			Main.logger.info(x.toString());
-			originTurn.addChild(originTurn.getData().executeMove(x));
+			originTurn.addChild(originTurn.getBoard().executeMove(x));
 		}
 	}
 }

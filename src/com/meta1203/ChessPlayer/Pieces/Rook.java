@@ -5,6 +5,7 @@ import java.util.List;
 import com.meta1203.ChessPlayer.ChessPiece;
 import com.meta1203.ChessPlayer.Coordinate;
 import com.meta1203.ChessPlayer.Move;
+import com.meta1203.ChessPlayer.Turn;
 
 public class Rook implements ChessPiece {
 
@@ -23,7 +24,7 @@ public class Rook implements ChessPiece {
 	}
 
 	@Override
-	public List<Move> getValidMoves() {
+	public List<Move> getValidMoves(Turn t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

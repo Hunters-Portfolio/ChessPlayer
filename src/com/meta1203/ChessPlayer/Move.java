@@ -7,10 +7,10 @@ public class Move {
 	private int value;
 	
 	// Constructor
-	public Move(ChessPiece piece, Coordinate newPosition) {
+	public Move(ChessPiece piece, Coordinate newPosition, Board b) {
 		this.piece = piece;
 		this.newPosition = newPosition;
-		attack = Main.board.getPosition(newPosition);
+		attack = b.getPosition(newPosition);
 		if (attack != null) {
 			value = attack.getPointValue();
 		}

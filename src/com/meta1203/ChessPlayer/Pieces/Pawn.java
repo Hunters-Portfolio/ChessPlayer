@@ -6,6 +6,7 @@ import java.util.List;
 import com.meta1203.ChessPlayer.ChessPiece;
 import com.meta1203.ChessPlayer.Coordinate;
 import com.meta1203.ChessPlayer.Move;
+import com.meta1203.ChessPlayer.Turn;
 
 
 public class Pawn implements ChessPiece {
@@ -24,7 +25,7 @@ public class Pawn implements ChessPiece {
 	}
 
 	@Override
-	public List<Move> getValidMoves() {
+	public List<Move> getValidMoves(Turn t) {
 		List<Move> ret = new ArrayList<Move>();
 		// Unrolling loops is fun!
 		Move add = null;
@@ -32,7 +33,7 @@ public class Pawn implements ChessPiece {
 		// Move 1: Can I go 1 up?
 		test = coord.translate(0, 1, white);
 		if (coord != null){
-			add = new Move(this, test);
+			add = new Move(this, test, t.getBoard());
 			// Pawns can only advance if there is nothing in their path
 			if (add.getAttack() == null) {
 				ret.add(add);
@@ -49,7 +50,7 @@ public class Pawn implements ChessPiece {
 		// Move 3: attack to the left
 		test = coord.translate(-1, 1, white);
 		if (coord != null){
-			add = new Move(this, test);
+			add = new Move(this, test, t.getBoard());
 			// Pawns can only advance diagonally if they kill something in the process
 			if (add.getAttack() != null) {
 				ret.add(add);
@@ -58,7 +59,7 @@ public class Pawn implements ChessPiece {
 		// Move 4: attack to the right
 		test = coord.translate(1, 1, white);
 		if (coord != null){
-			add = new Move(this, test);
+			add = new Move(this, test, t.getBoard());
 			// Pawns can only advance diagonally if they kill something in the process
 			if (add.getAttack() != null) {
 				ret.add(add);

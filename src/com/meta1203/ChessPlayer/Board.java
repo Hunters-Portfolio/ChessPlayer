@@ -38,7 +38,7 @@ public class Board implements Cloneable {
 		return ret;
 	}
 
-	public List<Move> getMoves(boolean white) {
+	public List<Move> getMoves(Turn t) {
 		// TODO: finish this up
 		List<Move> total = new ArrayList<Move>();
 		for (ChessPiece[] x : inPlay) {
@@ -46,8 +46,8 @@ public class Board implements Cloneable {
 				if (y == null) {
 					continue;
 				}
-				if (y.isWhite() == white) {
-					total.addAll(y.getValidMoves());
+				if (y.isWhite() == t.isWhiteTurn()) {
+					total.addAll(y.getValidMoves(t));
 				}
 			}
 		}

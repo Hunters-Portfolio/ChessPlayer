@@ -11,25 +11,26 @@ import java.util.List;
 
 public class Turn implements Comparable <Turn>, Comparator<Turn> {
 
-	private Board data;
+	private Board board;
 	private Turn parent;
+	private boolean whiteTurn;
 	private List<Turn> children;
 	private int depth;
 
 	public Turn(Board data) {
-		this.data = data;
+		this.board = data;
 		this.children = new LinkedList<Turn>();
 		this.depth = 1;
 	}
 	
-	public Turn(Board data, int depth) {
-		this.data = data;
+	public Turn(Board data, int depth, boolean white) {
+		this.board = data;
 		this.children = new LinkedList<Turn>();
 		this.depth = depth;
 	}
 
 	public Turn addChild(Board child) {
-		Turn childNode = new Turn(child, this.depth + 1);
+		Turn childNode = new Turn(child, this.depth + 1, !this.whiteTurn);
 		childNode.parent = this;
 		this.children.add(childNode);
 		return childNode;
@@ -44,8 +45,8 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 	}
 	
 	// Getters
-	public Board getData() {
-		return data;
+	public Board getBoard() {
+		return board;
 	}
 	public Turn getParent() {
 		return parent;
@@ -53,12 +54,15 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 	public List<Turn> getChildren() {
 		return children;
 	}
+	public boolean isWhiteTurn() {
+		return whiteTurn;
+	}
 	
 	// Comparison
 	@Override
 	public int compare(Turn one, Turn another) {
 		// Weigh both points and # of turns made
-		return (one.data.getBlackPointValue()+(50-one.depth))-(another.data.getBlackPointValue()+(50-another.depth));
+		return (one.board.getBlackPointValue()+(50-one.depth))-(another.board.getBlackPointValue()+(50-another.depth));
 	}
 
 	@Override
