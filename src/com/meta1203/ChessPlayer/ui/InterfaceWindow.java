@@ -20,9 +20,9 @@ public class InterfaceWindow {
 
 	public JFrame frame;
 	private JTable board;
-	private JTextField input;
-	private JTextPane output;
-	private JButton btnSubmit;
+	protected JTextField input;
+	protected JTextPane output;
+	protected JButton btnSubmit;
 
 	/**
 	 * Create the application.
@@ -60,7 +60,7 @@ public class InterfaceWindow {
 				{"", "A", "B", "C", "D", "E", "F", "G", "H"},
 			},
 			new String[] {
-				"New column", "A", "A", "C", "D", "E", "F", "G", "H"
+				"none", "A", "A", "C", "D", "E", "F", "G", "H"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {

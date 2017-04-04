@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import com.meta1203.ChessPlayer.ui.InterfaceWindow;
 
 public class Main {
-	// public static Board board = null;
 	public static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	public static void main(String[] args) throws SecurityException, IOException {
