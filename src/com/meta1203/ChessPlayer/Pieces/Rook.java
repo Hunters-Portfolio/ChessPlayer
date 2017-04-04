@@ -30,7 +30,7 @@ public class Rook implements ChessPiece {
 
 	@Override
 	public int getPointValue() {
-		return 1;
+		return 5;
 	}
 
 	@Override

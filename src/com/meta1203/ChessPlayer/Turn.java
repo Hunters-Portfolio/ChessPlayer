@@ -14,14 +14,22 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 	private Board data;
 	private Turn parent;
 	private List<Turn> children;
+	private int depth;
 
 	public Turn(Board data) {
 		this.data = data;
 		this.children = new LinkedList<Turn>();
+		this.depth = 1;
+	}
+	
+	public Turn(Board data, int depth) {
+		this.data = data;
+		this.children = new LinkedList<Turn>();
+		this.depth = depth;
 	}
 
 	public Turn addChild(Board child) {
-		Turn childNode = new Turn(child);
+		Turn childNode = new Turn(child, this.depth + 1);
 		childNode.parent = this;
 		this.children.add(childNode);
 		return childNode;
@@ -35,33 +43,26 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 		}
 	}
 	
-	// Getters and setters
+	// Getters
 	public Board getData() {
 		return data;
-	}
-	public void setData(Board data) {
-		this.data = data;
 	}
 	public Turn getParent() {
 		return parent;
 	}
-	public void setParent(Turn parent) {
-		this.parent = parent;
-	}
 	public List<Turn> getChildren() {
 		return children;
 	}
-	public void setChildren(List<Turn> children) {
-		this.children = children;
-	}
-
+	
+	// Comparison
 	@Override
 	public int compare(Turn one, Turn another) {
-		return one.data.compareTo(another.data);
+		// Weigh both points and # of turns made
+		return (one.data.getBlackPointValue()+(50-one.depth))-(another.data.getBlackPointValue()+(50-another.depth));
 	}
 
 	@Override
 	public int compareTo(Turn other) {
-		return this.data.compareTo(other.data);
+		return this.compare(this, other);
 	}
 }

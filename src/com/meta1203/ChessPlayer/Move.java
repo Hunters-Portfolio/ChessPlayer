@@ -42,4 +42,11 @@ public class Move {
 	public int getValue() {
 		return value;
 	}
+	/*
+	 * Return human readable information for logging purposes
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return this.piece.getPieceName() + " from " + this.piece.getCurrentLocation().toString() + " to " + this.newPosition.toString();
+	}
 }

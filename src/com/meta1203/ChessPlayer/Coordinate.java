@@ -37,8 +37,12 @@ public class Coordinate {
 	}
 	
 	// Check if this Coordinate occupies the same space as another Coordinate
-	public boolean compare(Coordinate other) {
-		return this.x == other.getX() && this.y == other.getY();
+	public boolean equals(Object other) {
+		if (!(other instanceof Coordinate)) {
+			return false;
+		}
+		Coordinate other1 = (Coordinate)other;
+		return this.x == other1.getX() && this.y == other1.getY();
 	}
 	
 	// Translate a human-readable location (G4) to a machine recognizable location (6,3)
@@ -74,5 +78,9 @@ public class Coordinate {
 			throw new IllegalArgumentException();
 		}
 		return new Coordinate(xIntern, y-1);
+	}
+	
+	public String toString() {
+		return "{" + String.valueOf((char)(x + 65)) + "," + Integer.toString(y) + "}";
 	}
 }
