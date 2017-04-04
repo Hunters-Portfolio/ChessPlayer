@@ -1,17 +1,15 @@
 package com.meta1203.ChessPlayer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Board implements Cloneable {
-	private Map<Coordinate,ChessPiece> inPlay;
+	private ChessPiece[][] inPlay;
 	private int whitePointValue = 0;
 	private int blackPointValue = 0;
 
 	public Board() {
-		inPlay = new HashMap<Coordinate,ChessPiece>();
+		inPlay = new ChessPiece[8][8];
 	}
 
 	public void populate() {
@@ -19,7 +17,7 @@ public class Board implements Cloneable {
 	}
 
 	public ChessPiece getPosition(Coordinate c) {
-		return inPlay.get(c);
+		return inPlay[c.getX()][c.getY()];
 	}
 
 	public Board executeMove(Move m) {
@@ -27,32 +25,37 @@ public class Board implements Cloneable {
 		Board ret = null;
 		ret = this.clone();
 		// Time to make the move
-		ret.inPlay.remove(m.getPiece().getCurrentLocation(), m.getPiece());
+		ret.inPlay[m.getPiece().getCurrentLocation().getX()][m.getPiece().getCurrentLocation().getY()] = null;
 		if (m.getAttack() != null) {
-			ret.inPlay.remove(m.getNewPosition(), m.getAttack());
+			ret.inPlay[m.getNewPosition().getX()][m.getNewPosition().getY()] = null;
 			if (m.getPiece().isWhite()) {
 				ret.whitePointValue = ret.whitePointValue + m.getValue();
 			} else {
 				ret.blackPointValue = ret.blackPointValue + m.getValue();
 			}
 		}
-		ret.inPlay.put(m.getNewPosition(), m.getPiece());
+		ret.inPlay[m.getNewPosition().getX()][m.getNewPosition().getY()] = m.getPiece();
 		return ret;
 	}
 
 	public List<Move> getMoves(boolean white) {
 		// TODO: finish this up
 		List<Move> total = new ArrayList<Move>();
-		for (ChessPiece x : inPlay.values()) {
-			if (x.isWhite() == white) {
-				total.addAll(x.getValidMoves());
+		for (ChessPiece[] x : inPlay) {
+			for (ChessPiece y : x) {
+				if (y == null) {
+					continue;
+				}
+				if (y.isWhite() == white) {
+					total.addAll(y.getValidMoves());
+				}
 			}
 		}
 		return total;
 	}
 
 	// Cloning stuff for deep copies
-	private Board(Map<Coordinate,ChessPiece> inPlay, int whitePoint, int blackPoint) {
+	private Board(ChessPiece[][] inPlay, int whitePoint, int blackPoint) {
 		this.inPlay = inPlay;
 		blackPointValue = blackPoint;
 		whitePointValue = whitePoint;
@@ -60,11 +63,13 @@ public class Board implements Cloneable {
 
 	@Override
 	protected Board clone() {
-		Map<Coordinate,ChessPiece> cloneMap = new HashMap<Coordinate, ChessPiece>();
-		for (Map.Entry<Coordinate, ChessPiece> x : this.inPlay.entrySet()) {
-			cloneMap.put(x.getKey(), x.getValue());
+		ChessPiece[][] cloneArray = new ChessPiece[8][8];
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				cloneArray[x][y] = this.inPlay[x][y];
+			}
 		}
-		return new Board(cloneMap, this.whitePointValue, this.blackPointValue);
+		return new Board(cloneArray, this.whitePointValue, this.blackPointValue);
 	}
 
 	public int getWhitePointValue() {
