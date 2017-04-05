@@ -18,5 +18,14 @@ public class Command implements ActionListener {
 		} else {
 			command = ((JTextComponent)((JComponent)source).getParent().getComponent(1)).getText();
 		}
+		String[] splitCommand = command.split(" ");
+		if (splitCommand.length != 3) {
+			// TODO: Alert the user of invalid command
+			return;
+		}
+		String piece = splitCommand[0];
+		String coord1 = splitCommand[1];
+		String coord2 = splitCommand[2];
+		
 	}
 }

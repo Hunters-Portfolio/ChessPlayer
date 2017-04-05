@@ -21,6 +21,8 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 		this.board = data;
 		this.children = new LinkedList<Turn>();
 		this.depth = 1;
+		this.parent = null;
+		this.whiteTurn = true;
 	}
 	
 	public Turn(Board data, int depth, boolean white) {
@@ -62,7 +64,9 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 	@Override
 	public int compare(Turn one, Turn another) {
 		// Weigh both points and # of turns made
-		return (one.board.getBlackPointValue()+(50-one.depth))-(another.board.getBlackPointValue()+(50-another.depth));
+		// Score = Black point value - # of turns - White point value
+		return (one.board.getBlackPointValue()-one.depth-one.board.getWhitePointValue())
+				-(another.board.getBlackPointValue()-another.depth-another.board.getWhitePointValue());
 	}
 
 	@Override

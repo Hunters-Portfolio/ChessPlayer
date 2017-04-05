@@ -30,6 +30,10 @@ public class InterfaceWindow {
 	public InterfaceWindow() {
 		initialize();
 	}
+	
+	public void addText(String text) {
+		output.setText(output.getText() + text + "\n");
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -63,6 +67,7 @@ public class InterfaceWindow {
 				"none", "A", "A", "C", "D", "E", "F", "G", "H"
 			}
 		) {
+			private static final long serialVersionUID = -6322696897479779586L;
 			boolean[] columnEditables = new boolean[] {
 				false, false, false, false, false, false, false, false, false
 			};
@@ -70,6 +75,7 @@ public class InterfaceWindow {
 				return columnEditables[column];
 			}
 		});
+		
 		board.getColumnModel().getColumn(1).setResizable(false);
 		board.getColumnModel().getColumn(2).setResizable(false);
 		board.getColumnModel().getColumn(3).setResizable(false);
@@ -92,6 +98,7 @@ public class InterfaceWindow {
 		input.setColumns(80);
 		
 		btnSubmit = new JButton("Submit");
+		btnSubmit.addActionListener(new Command());
 		
 		GroupLayout gl_form = new GroupLayout(form);
 		gl_form.setHorizontalGroup(
