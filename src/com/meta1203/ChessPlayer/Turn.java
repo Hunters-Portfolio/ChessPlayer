@@ -60,13 +60,20 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 		return whiteTurn;
 	}
 	
+	public int getValue() {
+		int ret = this.board.getBlackPointValue() - this.board.getWhitePointValue();
+		// Point values should decrease exponentially by turn
+		for (Turn x : this.getChildren()) {
+			ret += x.getValue()/2;
+		}
+		return ret;
+	}
+	
 	// Comparison
 	@Override
 	public int compare(Turn one, Turn another) {
 		// Weigh both points and # of turns made
-		// Score = Black point value - # of turns - White point value
-		return (one.board.getBlackPointValue()-one.depth-one.board.getWhitePointValue())
-				-(another.board.getBlackPointValue()-another.depth-another.board.getWhitePointValue());
+		return one.getValue() - another.getValue();
 	}
 
 	@Override
