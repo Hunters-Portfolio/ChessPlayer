@@ -27,7 +27,6 @@ public class Coordinate {
 	}
 	
 	// Getters/Setters... pretty self-explanitory
-	// May not need setters
 	public int getX() {
 		return x;
 	}

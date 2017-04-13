@@ -49,4 +49,12 @@ public class Move {
 	public String toString() {
 		return this.piece.getPieceName() + " from " + this.piece.getCurrentLocation().toString() + " to " + this.newPosition.toString();
 	}
+	
+	public boolean equals(Object o) {
+		if (!(o instanceof Move)) {
+			return false;
+		}
+		Move compare = (Move)o;
+		return this.getPiece().equals(compare.getPiece()) && this.getNewPosition().equals(compare.getNewPosition()) && this.getValue() == compare.getValue();
+	}
 }
