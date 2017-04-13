@@ -1,6 +1,7 @@
 package com.meta1203.ChessPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Board implements Cloneable {
@@ -46,7 +47,7 @@ public class Board implements Cloneable {
 				if (y == null) {
 					continue;
 				}
-				if (y.isWhite() == t.isWhiteTurn()) {
+				if (y.isWhite() != t.isWhiteTurn()) {
 					total.addAll(y.getValidMoves(t));
 				}
 			}
@@ -78,5 +79,13 @@ public class Board implements Cloneable {
 
 	public int getBlackPointValue() {
 		return blackPointValue;
+	}
+	
+	public boolean equals(Object o) {
+		if (!(o instanceof Board)) {
+			return false;
+		}
+		Board compare = (Board)o;
+		return Arrays.equals(this.inPlay, compare.inPlay) && this.whitePointValue == compare.whitePointValue && this.blackPointValue == compare.blackPointValue;
 	}
 }
