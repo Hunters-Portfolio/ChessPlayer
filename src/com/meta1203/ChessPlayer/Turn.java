@@ -1,6 +1,5 @@
 package com.meta1203.ChessPlayer;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,39 +17,43 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 	private Turn parent;
 	private boolean whiteTurn;
 	private List<Turn> children;
-	private int depth;
+	private int value;
 	
 	// Create a root turn
 	public Turn(Board data) {
 		this.board = data;
 		this.children = new LinkedList<Turn>();
-		this.depth = 1;
 		this.parent = null;
 		this.whiteTurn = false;
+		this.value = 0;
 	}
 	
 	// Constructor for child turns
-	private Turn(Board data, int depth, boolean white) {
+	private Turn(Board data, boolean white) {
 		this.board = data;
 		this.children = new LinkedList<Turn>();
-		this.depth = depth;
+		this.value = data.getBlackPointValue() - data.getWhitePointValue();
 	}
 	
 	// Create a child turn
 	public Turn addChild(Board child) {
-		Turn childNode = new Turn(child, this.depth + 1, !this.whiteTurn);
+		Turn childNode = new Turn(child, !this.whiteTurn);
 		childNode.parent = this;
 		this.children.add(childNode);
+		// Update value of the Turn when a child is added
+		this.value = calculateValue();
 		return childNode;
 	}
 	
-	// Sorting mechanism, will probably be replaced with a largest function instead
-	public void sort() {
-		if (children.isEmpty()) return;
-		Collections.sort(children);
+	// Get best available computer move from the children
+	public Turn bestMove() {
+		Turn best = children.get(0);
 		for (Turn x : children) {
-			x.sort();
+			if (x.getValue() > best.getValue()) {
+				best = x;
+			}
 		}
+		return best;
 	}
 	
 	// Getters
@@ -66,13 +69,31 @@ public class Turn implements Comparable <Turn>, Comparator<Turn> {
 	public boolean isWhiteTurn() {
 		return whiteTurn;
 	}
+	public int getValue() {
+		return value;
+	}
+	
+	// Get max depth of children
+	public int getDepth() {
+		int depth = 0;
+		Turn t = this;
+		boolean containsChild = !t.children.isEmpty();
+		
+		while (containsChild) {
+			t = t.children.get(0);
+			depth += 1;
+			containsChild = !t.children.isEmpty();
+		}
+		
+		return depth;
+	}
 	
 	// Assign a hard point value to turns based on the black score of the turn and all of its children
-	public int getValue() {
+	private int calculateValue() {
 		int ret = this.board.getBlackPointValue() - this.board.getWhitePointValue();
 		// Point values should decrease exponentially by turn
 		for (Turn x : this.getChildren()) {
-			ret += x.getValue()/2;
+			ret += x.calculateValue()/2;
 		}
 		return ret;
 	}
