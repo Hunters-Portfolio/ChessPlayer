@@ -47,7 +47,7 @@ public class Board implements Cloneable {
 				if (y == null) {
 					continue;
 				}
-				if (y.isWhite() != t.isWhiteTurn()) {
+				if (y.isWhite() != t.isWhiteTurn()) { // Calculating the moves of the next turn
 					total.addAll(y.getValidMoves(t));
 				}
 			}

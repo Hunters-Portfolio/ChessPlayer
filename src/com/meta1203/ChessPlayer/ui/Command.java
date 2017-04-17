@@ -41,7 +41,8 @@ public class Command implements ActionListener {
 		String coord2 = splitCommand[2];
 		// runPlayerTurn(piece, Coordinate.letterToCoord(coord1, y))
 	}
-
+	
+	// Perform the player's turn
 	public boolean runPlayerTurn(String pieceName, Coordinate coord1, Coordinate coord2) {
 		ChessPiece piece = Main.singleton.currentTurn.getBoard().getPosition(coord1);
 		// Sanity check to make sure that the piece is the one we want to move, and its where the player thinks it is
@@ -66,7 +67,8 @@ public class Command implements ActionListener {
 		Main.logger.severe(newMove.toString());
 		throw new RuntimeException("Valid move not found within the turn-set!");
 	}
-
+	
+	// Perform the computer's turn
 	public void runComputerTurn() throws InterruptedException {
 		Main.singleton.currentTurn = Main.singleton.currentTurn.getChildren().get(0);
 		// Don't multithread just yet...

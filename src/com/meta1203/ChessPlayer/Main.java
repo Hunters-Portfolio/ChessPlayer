@@ -11,7 +11,8 @@ import com.meta1203.ChessPlayer.ui.InterfaceWindow;
 public class Main {
 	public static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	public static ChessPlayerSingleton singleton = null;
-
+	
+	// Insert point for the program
 	public static void main(String[] args) throws SecurityException, IOException {
 		// Setup the logger
 		logger.setLevel(Level.INFO);

@@ -31,6 +31,7 @@ public class InterfaceWindow {
 		initialize();
 	}
 	
+	// Add text to the output box
 	public void addText(String text) {
 		output.setText(output.getText() + text + "\n");
 	}
