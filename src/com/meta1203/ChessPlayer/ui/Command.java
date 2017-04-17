@@ -41,7 +41,7 @@ public class Command implements ActionListener {
 		String coord2 = splitCommand[2];
 		// runPlayerTurn(piece, Coordinate.letterToCoord(coord1, y))
 	}
-	
+
 	// Perform the player's turn
 	public boolean runPlayerTurn(String pieceName, Coordinate coord1, Coordinate coord2) {
 		ChessPiece piece = Main.singleton.currentTurn.getBoard().getPosition(coord1);
@@ -67,46 +67,51 @@ public class Command implements ActionListener {
 		Main.logger.severe(newMove.toString());
 		throw new RuntimeException("Valid move not found within the turn-set!");
 	}
-	
+
 	// Perform the computer's turn
 	public void runComputerTurn() throws InterruptedException {
-		Main.singleton.currentTurn = Main.singleton.currentTurn.getChildren().get(0);
-		// Don't multithread just yet...
-		CalculateMovesThread thread1 = new CalculateMovesThread(Main.singleton.currentTurn);
-		thread1.run();
-		// Prepare to do a 4 turn deep calculation
+		// Already know what the best move is beforehand, just execute it now
+		Main.singleton.currentTurn = Main.singleton.currentTurn.bestMove();
+		// Check the depth so we don't recalculate moves (target is 6 moves ahead)
+		int depth = Main.singleton.currentTurn.getDepth();
+		// Set everything up
 		ConcurrentLinkedQueue<Turn> queue = new ConcurrentLinkedQueue<Turn>();
 		List<Turn> done = new ArrayList<Turn>();
-		// Pass 1
-		queue.addAll(Main.singleton.currentTurn.getChildren());
-		ExecutorService es = Executors.newCachedThreadPool();
-		while (!queue.isEmpty()) {
-			Turn t = queue.poll();
-			if (t == null) {
-				break;
-			}
-			done.add(t);
-			es.execute(new CalculateMovesThread(t));
+		
+		// If this is the first move, we need to set everything up properly
+		if (depth == 0) {
+			CalculateMovesThread cmt = new CalculateMovesThread(Main.singleton.currentTurn);
+			cmt.run();
+			depth = 1;
 		}
-		es.shutdown();
-		es.awaitTermination(5, TimeUnit.DAYS);
-		// Passes 2-4
-		for (int count = 0; count < 3; count++) {
-			for (Turn x : done) {
-				queue.addAll(x.getChildren());
+		
+		// Go down to the depth to begin with
+		queue.addAll(Main.singleton.currentTurn.getChildren());
+		for (int x = 0; x < depth; x++) {
+			while (!queue.isEmpty()) {
+				done.addAll(queue.poll().getChildren());
 			}
+			queue.addAll(done);
 			done.clear();
-			es = Executors.newCachedThreadPool();
+		}
+		
+		// Calculate the missing moves
+		for (int count = depth; count < 7; count++) {
+			// Run through everything in the queue
+			ExecutorService es = Executors.newCachedThreadPool();
 			while (!queue.isEmpty()) {
 				Turn t = queue.poll();
-				if (t == null) {
-					break;
-				}
 				done.add(t);
 				es.execute(new CalculateMovesThread(t));
 			}
 			es.shutdown();
 			es.awaitTermination(5, TimeUnit.DAYS);
+			
+			// Setup the next batch
+			for (Turn x : done) {
+				queue.addAll(x.getChildren());
+			}
+			done.clear();
 		}
 	}
 }
