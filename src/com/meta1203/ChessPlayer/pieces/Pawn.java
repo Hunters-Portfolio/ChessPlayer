@@ -1,4 +1,4 @@
-package com.meta1203.ChessPlayer.Pieces;
+package com.meta1203.ChessPlayer.pieces;
 
 import java.util.ArrayList;
 import java.util.List;
